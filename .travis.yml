@@ -10,7 +10,6 @@ matrix:
   include:
     - language: node_js
       node_js:
-        - 'stable'
         - 'lts/*'
       before_install:
         - 'node --version'
