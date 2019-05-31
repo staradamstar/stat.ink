@@ -24,6 +24,10 @@ matrix:
   allow_failures:
     - php: 'nightly'
 
+env:
+  global:
+    - PGPORT=5432
+
 cache:
   directories:
     - $HOME/.cache/composer
@@ -37,7 +41,7 @@ before_install:
   - sudo /etc/init.d/postgresql start 11
   - sudo -u postgres createuser statink
   - sudo -u postgres psql -c 'ALTER USER statink WITH PASSWORD '\''statink'\'''
-  - sudo -u postgres createdb --locale=C.UTF-8 --encoding=UTF8 --owner=statink statink
+  - sudo -u postgres createdb --locale=en_US.UTF-8 --encoding=UTF8 --owner=statink statink
 
 before_script:
   - composer --version
