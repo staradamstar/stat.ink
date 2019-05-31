@@ -44,11 +44,7 @@ before_install:
   - sudo -u postgres createdb --locale=en_US.UTF-8 --encoding=UTF8 --owner=statink statink
 
 before_script:
-  - composer --version
-  - composer self-update
-  - composer --version
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - cp `which composer` composer.phar
 
 script:
   - make check-syntax
