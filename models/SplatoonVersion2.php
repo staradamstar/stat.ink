@@ -107,4 +107,13 @@ class SplatoonVersion2 extends ActiveRecord
     {
         return $this->hasMany(StatWeapon2Result::class, ['version_id' => 'id']);
     }
+
+    public function getNextVersion(): ?self
+    {
+        return static::find()
+            ->andWhere(['>', 'released_at', $this->released_at])
+            ->orderBy(['released_at' => SORT_ASC])
+            ->limit(1)
+            ->one();
+    }
 }

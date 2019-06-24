@@ -61,4 +61,24 @@ class SplatoonVersionGroup2 extends ActiveRecord
     {
         return $this->hasMany(SplatoonVersion2::class, ['group_id' => 'id']);
     }
+
+    public function getFirstVersion(): ?SplatoonVersion2
+    {
+        return (count($this->versions) > 0) ? $this->versions[0] : null;
+    }
+
+    public function getLastVersion(): ?SplatoonVersion2
+    {
+        $c = count($this->versions);
+        return $c > 0 ? $this->versions[$c - 1] : null;
+    }
+
+    public function getNextVersion(): ?SplatoonVersion2
+    {
+        if (!$lastVersion = $this->getLastVersion()) {
+            return null;
+        }
+
+        return $lastVersion->nextVersion;
+    }
 }

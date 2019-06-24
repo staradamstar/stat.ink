@@ -983,6 +983,7 @@ class StatController extends Controller
         $this->updateWeaponUseCount1();
         $this->updateWeaponUseCount2();
         $this->actionUpdateWeaponUseTrend();
+        $this->actionUpdateWeaponUseTrend2();
     }
 
     private function updateWeaponUseCount1()
@@ -1590,6 +1591,16 @@ class StatController extends Controller
         $db->createCommand($insertTrend)->execute();
 
         $transaction->commit();
+    }
+
+    public function actionUpdateWeaponUseTrend2(): int
+    {
+        $abstract = Yii::createObject(['class' => stat\Weapon2TrendAbstractHelper::class]);
+        if (!$abstract->run()) {
+            return 1;
+        }
+
+        return 0;
     }
 
     /**
