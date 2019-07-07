@@ -4,7 +4,7 @@
     $('.trend-graph').each(function () {
       const $graph = $(this);
       const json = JSON.parse($($graph.data('target')).text());
-      const xaxisJson = JSON.parse($($graph.data('xaxis')).text());
+      // const xaxisJson = JSON.parse($($graph.data('xaxis')).text());
       const data = json.map(typeData => ({
         label: typeData.name,
         lines: {
@@ -49,6 +49,7 @@
         },
         legend: {
           container: $($graph.data('legend')),
+          sorted: 'reverse',
         },
       });
     });
