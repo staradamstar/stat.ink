@@ -477,6 +477,7 @@ return [
     'This website is an open source project. It is under the MIT License. The source code is available on GitHub.' => 'このサイトのソースコードはオープンソース(MIT License)で公開されています。',
     'This website uses cookies to track your session or save your configuration (e.g., language / time zone settings).' => 'このウェブサイトはセッションを追跡したり、設定（例えば言語・タイムゾーン設定）を保存するためにクッキーを使用しています。',
     'This {attribute} is already in use.' => '指定した{attribute}は既に使用されています。',
+    'Tier' => 'ティア',
     'Time Zone' => 'タイムゾーン',
     'Time is up' => 'タイムアップ',
     'Time was up' => 'タイムアップ',

@@ -7,6 +7,7 @@ use app\components\widgets\FA;
 use app\components\widgets\GameModeIcon;
 use app\components\widgets\SnsWidget;
 use app\models\Rule2;
+use app\models\StatWeapon2Tier;
 use yii\bootstrap\Nav;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -63,20 +64,53 @@ EntireWeapons2TrendAsset::register($this);
     ]) . "\n" ?>
   </div>
 
-  <h2><?= Html::encode(Yii::t('app', 'Stats')) ?></h2>
-  <div class="list-group d-inline-block">
+  <div class="row">
+    <div class="col-12 col-sm-6 col-md-4">
+      <h2><?= Html::encode(Yii::t('app', 'Stats')) ?></h2>
+      <div class="list-group d-inline-block">
 <?php foreach (Rule2::getSortedAll(null) as $key => $name) { ?>
-    <?= Html::a(
-      implode(' ', [
-        GameModeIcon::spl2($key),
-        Html::encode($name),
-      ]),
-      ['entire/weapons2-rule',
-        'rule' => $key,
-        'version' => 'latest',
-      ],
-      ['class' => 'list-group-item']
-    ) . "\n" ?>
+        <?= Html::a(
+          implode(' ', [
+            GameModeIcon::spl2($key),
+            Html::encode($name),
+          ]),
+          ['entire/weapons2-rule',
+            'rule' => $key,
+            'version' => 'latest',
+          ],
+          ['class' => 'list-group-item']
+        ) . "\n" ?>
 <?php } ?>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4">
+      <h2><?= Html::encode(Yii::t('app', 'Tier')) ?></h2>
+      <div class="list-group d-inline-block">
+<?php foreach (Rule2::getSortedAll('gachi') as $key => $name) { ?>
+<?php $tier = StatWeapon2Tier::find()
+  ->thresholded()
+  ->innerJoinWith(['rule'], false)
+  ->andWhere(['rule2.key' => $key])
+  ->orderBy(['id' => SORT_DESC])
+  ->limit(1)
+  ->one()
+?>
+<?php if ($tier) { ?>
+        <?= Html::a(
+          implode(' ', [
+            GameModeIcon::spl2($key),
+            Html::encode($name),
+          ]),
+          ['entire/weapons2-tier',
+            'rule' => $key,
+            'version' => $tier->versionGroup->tag,
+            'month' => substr($tier->month, 0, 7),
+          ],
+          ['class' => 'list-group-item']
+        ) . "\n" ?>
+<?php } ?>
+<?php } ?>
+      </div>
+    </div>
   </div>
 </div>

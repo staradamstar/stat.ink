@@ -487,6 +487,7 @@ return [
     'This website is an UNOFFICIAL SERVICE. It is not related to the Splatoon development team or Nintendo.' => 'Este sitio web es UN SERVICIO NO OFICIAL. No está relacionado con el equipo de desarrollo de Splatoon o Nintendo.',
     'This website uses cookies to track your session or save your configuration (e.g., language / time zone settings).' => '',
     'This {attribute} is already in use.' => 'Este {attribute} ya está en uso.',
+    'Tier' => '',
     'Time' => '',
     'Time is up' => '',
     'Times' => '',
