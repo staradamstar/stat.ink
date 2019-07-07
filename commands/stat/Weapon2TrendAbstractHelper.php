@@ -198,10 +198,15 @@ class Weapon2TrendAbstractHelper extends Component
                 'v.group_id = t.version_group_id',
                 'b.period <@ t.period_range',
             ]))
+            ->innerJoin('lobby2', 'b.lobby_id = lobby2.id')
             ->andWhere(['and',
+                ['<>', 'lobby2.key', 'private'],
                 ['b.is_automated' => true],
                 ['b.use_for_entire' => true],
-                ['b.is_win' => [true, false]],
+                ['not', ['b.is_win' => null]],
+                ['not', ['b.map_id' => null]],
+                ['not', ['b.mode_id' => null]],
+                ['not', ['b.rule_id' => null]],
                 ['not', ['p.weapon_id' => null]],
                 ['p.is_me' => false],
             ])

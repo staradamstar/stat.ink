@@ -1,14 +1,17 @@
 <?php
 /**
- * @copyright Copyright (C) 2015-2017 AIZAWA Hina
+ * @copyright Copyright (C) 2015-2019 AIZAWA Hina
  * @license https://github.com/fetus-hina/stat.ink/blob/master/LICENSE MIT
  * @author AIZAWA Hina <hina@fetus.jp>
  */
+
+declare(strict_types=1);
 
 namespace app\models;
 
 use Yii;
 use app\components\helpers\Translator;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -18,42 +21,37 @@ use yii\db\ActiveRecord;
  * @property string $key
  * @property integer $category_id
  * @property string $name
+ * @property integer $rank
  *
- * @property Weapon2[] $weapon2s
+ * @property Weapon2[] $weapons
  * @property WeaponCategory2 $category
  */
 class WeaponType2 extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return 'weapon_type2';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['key', 'category_id', 'name'], 'required'],
-            [['category_id'], 'integer'],
+            [['key', 'category_id', 'name', 'rank'], 'required'],
+            [['category_id', 'rank'], 'default', 'value' => null],
+            [['category_id', 'rank'], 'integer'],
             [['key'], 'string', 'max' => 16],
             [['name'], 'string', 'max' => 32],
+            [['category_id', 'rank'], 'unique', 'targetAttribute' => ['category_id', 'rank']],
             [['key'], 'unique'],
             [['name'], 'unique'],
-            [['category_id'], 'exist', 'skipOnError' => true,
+            [['category_id'], 'exist',
+                'skipOnError' => true,
                 'targetClass' => WeaponCategory2::class,
                 'targetAttribute' => ['category_id' => 'id'],
             ],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -61,34 +59,21 @@ class WeaponType2 extends ActiveRecord
             'key' => 'Key',
             'category_id' => 'Category ID',
             'name' => 'Name',
+            'rank' => 'Rank',
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWeapons()
+    public function getWeapons(): ActiveQuery
     {
         return $this->hasMany(Weapon2::class, ['type_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWeapon2s()
-    {
-        return $this->getWeapons();
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategory()
+    public function getCategory(): ActiveQuery
     {
         return $this->hasOne(WeaponCategory2::class, ['id' => 'category_id']);
     }
 
-    public function toJsonArray() : array
+    public function toJsonArray(): array
     {
         return [
             'key' => $this->key,

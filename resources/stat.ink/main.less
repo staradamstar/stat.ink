@@ -324,3 +324,33 @@ each(.props(), .(@propLong, @propShort, @propIndex) {
   .makeWidth((@pct + 5));
 }
 .makeWidth();
+
+.embed-responsive {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  overflow: hidden;
+
+  &::before {
+    display: block;
+    content: "";
+  }
+
+  .embed-responsive-item, embed, iframe, object, video {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.embed-responsive-16by9 {
+  &::before {
+    padding-top: 56.25%;
+  }
+}
