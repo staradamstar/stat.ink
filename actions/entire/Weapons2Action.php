@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace app\actions\entire;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Yii;
 use app\models\SplatoonVersionGroup2;
 use app\models\StatWeaponType2TrendAbstract;
@@ -27,6 +29,7 @@ class Weapons2Action extends BaseAction
             return $this->controller->render('weapons2', [
                 'weaponTypes' => $this->getWeaponTypeData(),
                 'dateVersion' => $this->getDateAndVersionData(),
+                'months' => $this->getMonths(),
             ]);
         });
     }
@@ -118,6 +121,7 @@ class Weapons2Action extends BaseAction
 
     private function getDateAndVersionData(): array
     {
+        // {{{
         $q = (new Query())
             ->select([
                 'version_name' => 'MAX(v.name)',
@@ -134,11 +138,48 @@ class Weapons2Action extends BaseAction
             ->orderBy([
                 'MIN(t.start_date)' => SORT_ASC,
             ]);
-        $result = [];
-        foreach ($q->all() as $row) {
-            $t = strtotime($row['start_date']);
-            $result[] = [$t, Yii::t('app-version2', $row['version_name'])];
+        return  array_map(
+            function (array $row): array {
+                return [
+                    strtotime($row['start_date']),
+                    Yii::t('app-version2', $row['version_name']),
+                ];
+            },
+            $q->all()
+        );
+        // }}}
+    }
+
+    private function getMonths(): array
+    {
+        // {{{
+        if (!$initDate = StatWeaponType2TrendAbstract::find()->min('start_date')) {
+            return [];
         }
-        return $result;
+
+        $utc = new DateTimeZone('Etc/UTC');
+        $t = (new DateTimeImmutable($initDate))->setTimezone($utc);
+        $now = (new DateTimeImmutable())
+            ->setTimezone($utc)
+            ->setTimestamp((int)($_SERVER['REQUEST_TIME'] ?? time()));
+
+        $results = [];
+        while ($t <= $now) {
+            $results[] = [
+                (int)$t->getTimestamp(),
+                $t->format('Y-m-d'),
+            ];
+            $t = $t->setTime(0, 0, 0)->setDate(
+                (int)$t->format('Y'),
+                (int)$t->format('n') + 1,
+                1
+            );
+        }
+        $results[] = [
+            (int)$now->getTimestamp(),
+            $now->format('Y-m-d'),
+        ];
+        return $results;
+        // }}}
     }
 }

@@ -47,6 +47,7 @@ EntireWeapons2TrendAsset::register($this);
   ]) ?></nav>
 
   <h2><?= Html::encode(Yii::t('app', 'Trends')) ?></h2>
+  <script type="application/json" id="months"><?= Json::encode($months) ?></script>
   <script type="application/json" id="weaponTypes"><?= Json::encode(array_values($weaponTypes)) ?></script>
   <script type="application/json" id="dateAndVersions"><?= Json::encode($dateVersion) ?></script>
   <div id="trendLegends"></div>
@@ -54,9 +55,10 @@ EntireWeapons2TrendAsset::register($this);
     <?= Html::tag('div', '', [
       'class' => 'graph embed-responsive-item trend-graph',
       'data' => [
+        'legend' => '#trendLegends',
+        'months' => '#months',
         'target' => '#weaponTypes',
         'xaxis' => '#dateAndVersions',
-        'legend' => '#trendLegends',
       ],
     ]) . "\n" ?>
   </div>
