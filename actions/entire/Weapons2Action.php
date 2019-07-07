@@ -119,31 +119,25 @@ class Weapons2Action extends BaseAction
     private function getDateAndVersionData(): array
     {
         $q = (new Query())
-            ->distinct()
             ->select([
-                'start_date' => 't.start_date',
-                'version_name' => 'v.name',
+                'version_name' => 'MAX(v.name)',
+                'start_date' => 'MIN(t.start_date)',
             ])
             ->from(['t' => StatWeaponType2TrendAbstract::tableName()])
             ->innerJoin(
                 ['v' => SplatoonVersionGroup2::tableName()],
                 't.version_group_id = v.id'
             )
+            ->groupBy([
+                't.version_group_id',
+            ])
             ->orderBy([
-                't.start_date' => SORT_ASC,
+                'MIN(t.start_date)' => SORT_ASC,
             ]);
         $result = [];
         foreach ($q->all() as $row) {
             $t = strtotime($row['start_date']);
-            $result[] = [
-                $t,
-                vsprintf('%s, %s', [
-                    gmdate('Y-m', $t),
-                    Yii::t('app', 'Version {0}', [
-                        Yii::t('app-version2', $row['version_name']),
-                    ]),
-                ]),
-            ];
+            $result[] = [$t, Yii::t('app-version2', $row['version_name'])];
         }
         return $result;
     }

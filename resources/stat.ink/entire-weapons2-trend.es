@@ -4,7 +4,7 @@
     $('.trend-graph').each(function () {
       const $graph = $(this);
       const json = JSON.parse($($graph.data('target')).text());
-      // const xaxisJson = JSON.parse($($graph.data('xaxis')).text());
+      const xaxisJson = JSON.parse($($graph.data('xaxis')).text());
       const data = json.map(typeData => ({
         label: typeData.name,
         lines: {
@@ -34,18 +34,12 @@
           max: 100.1,
           minTickSize: 12.5,
           tickDecimals: 1,
-          tickFormatter: v => Number(v).toFixed(1) + '%',
+          tickFormatter: v => `${v}%`,
         },
         xaxis: {
           show: true,
           mode: 'time',
-          // tickFormatter: val => {
-          //   const d = new Date(val);
-          //   const zero = v => {
-          //     return v < 10 ? '0' + String(v) : String(v);
-          //   };
-          //   return d.getUTCFullYear() + '-' + zero(d.getUTCMonth() + 1);
-          // },
+          ticks: xaxisJson.map(v => [v[0] * 1000, v[1]]),
         },
         legend: {
           container: $($graph.data('legend')),
