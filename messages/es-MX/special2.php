@@ -8,11 +8,11 @@
 declare(strict_types=1);
 
 return [
-    'Any Special' => '',
+    'Any Special' => 'Cualquier especial',
     'Autobomb Launcher' => 'Robobombardeo',
     'Baller' => 'Esfera tintera',
     'Bomb Launcher' => 'Bombardeo',
-    'Booyah Bomb' => '',
+    'Booyah Bomb' => 'Bola genializante',
     'Bubble Blower' => 'Lanzaburbujas',
     'Burst-Bomb Launcher' => 'Bombardeo entintado',
     'Curling-Bomb Launcher' => 'Bombardeo deslizante',
@@ -24,5 +24,5 @@ return [
     'Sting Ray' => 'Rayo tintódico',
     'Suction-Bomb Launcher' => 'Bombardeo pegajoso',
     'Tenta Missiles' => 'Lanzamisiles',
-    'Ultra Stamp' => '',
+    'Ultra Stamp' => 'Ultraselladora',
 ];
